@@ -1,9 +1,6 @@
 from GUI import MainWindow, HandlerModes
 import sys
 
-# hello my freinds, im froum rusia, pleaze give me beer from kabinet.
-# my freind is rusian kyborg.
-
 
 def convert_to_mode(mode_str: str) -> HandlerModes:
     converter = {
@@ -21,6 +18,10 @@ if __name__ == "__main__":
     args = None
     if len(sys.argv) >= 2:
         args = sys.argv[1:]
+
+    if not args:
+        print("Недостаточно аргументов для запуска программы. Пожалуйста, проверьте справку в --help ")
+        sys.exit()
 
     if args[0] in ['help', '-help', '--help', '-h']:
         print('''

@@ -15,7 +15,7 @@ class Spellchecker:
         if word in self.known_words:
             return word
         else:
-            return self.correct(word)
+            return self._correct(word)
 
     def check_sentence(self, sentence: str, prettify=False):
         if sentence == '':
@@ -25,7 +25,7 @@ class Spellchecker:
         words = re.split(r'\W+', sentence)
         corrected = []
         for word in words:
-            corrected_word = self.correct(word) if word.isalpha() else None
+            corrected_word = self._correct(word) if word.isalpha() else None
             if (corrected_word is None) or (corrected_word == word):
                 continue
 
@@ -38,7 +38,7 @@ class Spellchecker:
         spelling = Spelling(word, self)
         return list(spelling.nearest_candidates())
 
-    def correct(self, word: str, prettify=False):
+    def _correct(self, word: str, prettify=False):
         spelling = Spelling(word, self)
         correct = spelling.correct()
 
@@ -47,5 +47,8 @@ class Spellchecker:
     def _prettify_output(self, word_with_mistake, corrected_word) -> str:
         return f'{word_with_mistake} -> {corrected_word}'
 
-    def correct_first_N(self, sentence: str, count: int) -> str:
-        pass
+    def correct_first_N(self, sentence: str, count: int):
+        words = re.split(r'\W+', sentence)[:count]
+        corrected = [self._correct(w) for w in words]
+
+        return corrected

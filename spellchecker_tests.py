@@ -53,7 +53,7 @@ class SpellChecker_Tests(unittest.TestCase):
         words = ['diplomatically', 'disadvantageous', 'disallowing', 'hollowed', 'incrimination']
         corrupted = ['diplomaticaly', 'dizadvantageus', 'disalowin', 'holowed', 'incremination']
 
-        self.assertEqual(words, [self.spellchecker.correct(w) for w in corrupted])
+        self.assertEqual(words, [self.spellchecker._correct(w) for w in corrupted])
 
 
 class Spelling_Tests(unittest.TestCase):

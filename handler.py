@@ -49,7 +49,7 @@ class AutoCorrect_Handler(HandlerABC):
             return {}, False
 
         word = all_tokens[-2]
-        corrected = self.spellchecker.correct(word)
+        corrected = self.spellchecker._correct(word)
 
         return ({corrected: self.get_format_indexes(word)}, True) \
             if word != corrected \
@@ -69,7 +69,7 @@ class Highlight_Handler(HandlerABC):
 
         bindings = {}
         for token in word_tokens:
-            if token != self.spellchecker.correct(token):
+            if token != self.spellchecker._correct(token):
                 bindings[token] = self.get_format_indexes(token)
 
         return bindings, True
