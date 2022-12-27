@@ -26,7 +26,11 @@ class Spelling:
         return min([(Spelling.levenstein(self.word, w), w) for w in self.nearest_candidates()])[1]
 
     def nearest_candidates(self) -> set:
-        return self.match_known(self.edit1(self.word)) or self.match_known(self.edit2(self.word)) or [self.word]
+        _nearest = set()
+        _nearest.update(self.edit1(self.word))
+        _nearest.update(self.edit2(self.word))
+
+        return self.match_known(_nearest) or [self.word]
 
     def match_known(self, words) -> set:
         return set([candidate for candidate in words if candidate in self.checker.known_words])

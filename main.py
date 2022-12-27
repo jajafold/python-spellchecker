@@ -30,7 +30,7 @@ if __name__ == "__main__":
         
     Usage: main.py [option]
      -l,  --light        Spellchecker will only highlight misspelled words
-     -a,  --auto             Spellchecker will automatically replace misspelled words
+     -a,  --auto         Spellchecker will automatically replace misspelled words
         ''')
 
         sys.exit()

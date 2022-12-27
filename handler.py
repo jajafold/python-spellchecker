@@ -1,7 +1,7 @@
 from enum import Enum
 from Spellchecker import Spellchecker
 from abc import ABC, abstractmethod
-from nltk.tokenize import word_tokenize
+from tokenizer import Tokenizer
 import re
 
 
@@ -12,11 +12,11 @@ class HandlerModes(Enum):
 
 class HandlerABC(ABC):
     words = []
-    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    alphabet = "abcdefghijklmnopqrstuvwxyz-"
 
     def __init__(self):
         with open("en-base.txt", 'r') as base:
-            self.words = set(re.findall(r'\w+', base.read().lower()))
+            self.words = set(re.findall(r'[\w-]+', base.read().lower()))
 
         self.spellchecker = Spellchecker(self.words, self.alphabet)
         self.previous_separator_index = (1, -1)
@@ -43,12 +43,15 @@ class AutoCorrect_Handler(HandlerABC):
 
     def handle(self, text: str) -> (dict, bool):
         self.text = text
-        all_tokens = word_tokenize(text)
+        all_tokens = Tokenizer.tokenize(text)[:-1]
 
         if len(all_tokens) < 2:
             return {}, False
 
         word = all_tokens[-2]
+        if not word.isalpha():
+            return {}, False
+
         corrected = self.spellchecker._correct(word)
 
         return ({corrected: self.get_format_indexes(word)}, True) \
@@ -63,8 +66,12 @@ class Highlight_Handler(HandlerABC):
 
     def handle(self, text: str) -> (dict, bool):
         self.text = text
-        all_tokens = word_tokenize(text)
-        all_tokens = all_tokens[:len(all_tokens) - 1]
+        all_tokens = Tokenizer.tokenize(text)
+        all_tokens = all_tokens[:-2]
+
+        if len(all_tokens) < 2:
+            return {}, False
+
         word_tokens = [literal for literal in all_tokens if literal.isalpha()]
 
         bindings = {}

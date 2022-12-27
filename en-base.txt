@@ -29924,6 +29924,7 @@ loners
 lonesome
 lonesomeness
 long
+long-term
 longawaited
 longed
 longer
@@ -51525,6 +51526,7 @@ texan
 texans
 texas
 text
+text-to-speech
 textbook
 textbooks
 textile
