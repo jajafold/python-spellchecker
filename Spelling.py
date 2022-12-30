@@ -22,15 +22,24 @@ class Spelling:
 
         return current_row[n]
 
+    def _edit_0(self, word: str):
+        split = [(word[:i], word[i:]) for i in range(len(word) + 1)]
+        for left, right in split:
+            if left.lower() in self.checker.known_words \
+                    and right.lower() in self.checker.known_words and f'{left}-{right}' not in self.checker.known_words:
+                return f'{left} {right}'
+
+        return None
+
     def correct(self):
+        _sub = self._edit_0(self.word)
+        if _sub is not None:
+            return _sub
+
         return min([(Spelling.levenstein(self.word, w), w) for w in self.nearest_candidates()])[1]
 
     def nearest_candidates(self) -> set:
-        _nearest = set()
-        _nearest.update(self.edit1(self.word))
-        _nearest.update(self.edit2(self.word))
-
-        return self.match_known(_nearest) or [self.word]
+        return self.match_known(self.edit1(self.word)) or self.match_known(self.edit2(self.word)) or [self.word]
 
     def match_known(self, words) -> set:
         return set([candidate for candidate in words if candidate in self.checker.known_words])

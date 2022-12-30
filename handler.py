@@ -44,12 +44,11 @@ class AutoCorrect_Handler(HandlerABC):
     def handle(self, text: str) -> (dict, bool):
         self.text = text
         all_tokens = Tokenizer.tokenize(text)[:-1]
-
         if len(all_tokens) < 2:
             return {}, False
 
         word = all_tokens[-2]
-        if not word.isalpha():
+        if not word.isalpha() and '-' not in word:
             return {}, False
 
         corrected = self.spellchecker._correct(word)
